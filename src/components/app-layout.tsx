@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Mail, ClipboardList, CalendarCheck, Workflow, Loader2, ShieldAlert, Sparkles, X } from "lucide-react";
+import { Mail, ClipboardList, CalendarCheck, Workflow, Loader2, ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
