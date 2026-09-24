@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { to: "/smart-email", label: "Smart Email", icon: Mail },
   { to: "/meeting-summarizer", label: "Meeting Summarizer", icon: ClipboardList },
   { to: "/task-planner", label: "Task Planner", icon: CalendarCheck },
+  { to: "/focus-timer", label: "Focus Timer", icon: Timer },
 ] as const;
 
 // ---- Hourly motivation bubble ----
