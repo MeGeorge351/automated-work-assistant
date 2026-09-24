@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FocusTimerRouteImport } from './routes/focus-timer'
 import { Route as MeetingSummarizerRouteImport } from './routes/meeting-summarizer'
 import { Route as SmartEmailRouteImport } from './routes/smart-email'
 import { Route as TaskPlannerRouteImport } from './routes/task-planner'
@@ -17,6 +18,11 @@ import { Route as TaskPlannerRouteImport } from './routes/task-planner'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FocusTimerRoute = FocusTimerRouteImport.update({
+  id: '/focus-timer',
+  path: '/focus-timer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeetingSummarizerRoute = MeetingSummarizerRouteImport.update({
@@ -37,12 +43,14 @@ const TaskPlannerRoute = TaskPlannerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/focus-timer': typeof FocusTimerRoute
   '/meeting-summarizer': typeof MeetingSummarizerRoute
   '/smart-email': typeof SmartEmailRoute
   '/task-planner': typeof TaskPlannerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/focus-timer': typeof FocusTimerRoute
   '/meeting-summarizer': typeof MeetingSummarizerRoute
   '/smart-email': typeof SmartEmailRoute
   '/task-planner': typeof TaskPlannerRoute
@@ -50,21 +58,38 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/focus-timer': typeof FocusTimerRoute
   '/meeting-summarizer': typeof MeetingSummarizerRoute
   '/smart-email': typeof SmartEmailRoute
   '/task-planner': typeof TaskPlannerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/meeting-summarizer' | '/smart-email' | '/task-planner'
+  fullPaths:
+    | '/'
+    | '/focus-timer'
+    | '/meeting-summarizer'
+    | '/smart-email'
+    | '/task-planner'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/meeting-summarizer' | '/smart-email' | '/task-planner'
+  to:
+    | '/'
+    | '/focus-timer'
+    | '/meeting-summarizer'
+    | '/smart-email'
+    | '/task-planner'
   id:
-    '__root__' | '/' | '/meeting-summarizer' | '/smart-email' | '/task-planner'
+    | '__root__'
+    | '/'
+    | '/focus-timer'
+    | '/meeting-summarizer'
+    | '/smart-email'
+    | '/task-planner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FocusTimerRoute: typeof FocusTimerRoute
   MeetingSummarizerRoute: typeof MeetingSummarizerRoute
   SmartEmailRoute: typeof SmartEmailRoute
   TaskPlannerRoute: typeof TaskPlannerRoute
@@ -77,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/focus-timer': {
+      id: '/focus-timer'
+      path: '/focus-timer'
+      fullPath: '/focus-timer'
+      preLoaderRoute: typeof FocusTimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meeting-summarizer': {
@@ -105,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FocusTimerRoute: FocusTimerRoute,
   MeetingSummarizerRoute: MeetingSummarizerRoute,
   SmartEmailRoute: SmartEmailRoute,
   TaskPlannerRoute: TaskPlannerRoute,

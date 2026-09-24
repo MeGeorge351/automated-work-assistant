@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Mail, ClipboardList, CalendarCheck, Workflow, Loader2, ShieldAlert, Sparkles, X, Sun, Moon } from "lucide-react";
+import { Mail, ClipboardList, CalendarCheck, Timer, Workflow, Loader2, ShieldAlert, Sparkles, X, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { to: "/smart-email", label: "Smart Email", icon: Mail },
   { to: "/meeting-summarizer", label: "Meeting Summarizer", icon: ClipboardList },
   { to: "/task-planner", label: "Task Planner", icon: CalendarCheck },
+  { to: "/focus-timer", label: "Focus Timer", icon: Timer },
 ] as const;
 
 // ---- Hourly motivation bubble ----
