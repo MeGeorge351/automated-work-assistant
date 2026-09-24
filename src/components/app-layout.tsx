@@ -50,7 +50,7 @@ function MotivationBubble() {
       const delay = Math.max(next - now, 0);
       timer = window.setTimeout(() => {
         const idx = Number(localStorage.getItem(INDEX_KEY)) || 0;
-        setMessage(MOTIVATIONS[idx % MOTIVATIONS.length]);
+        setMessage(MOTIVATIONS[idx % MOTIVATIONS.length] ?? MOTIVATIONS[0]!);
         localStorage.setItem(INDEX_KEY, String((idx + 1) % MOTIVATIONS.length));
         localStorage.setItem(NEXT_KEY, String(Date.now() + MOTIVATION_INTERVAL));
         schedule();
