@@ -155,7 +155,7 @@ export async function summarizeMeeting(notes: string): Promise<MeetingSummary> {
       { owner: "Priya", task: "Prepare the budget review deck for next Tuesday's sync" },
       { owner: "Whole team", task: "Review the shared notes and add any missing context" },
     ],
-    deadlines: ["Friday, 5:00 PM — project timeline", "Next Tuesday — budget review sync", "End of month — client feedback闭环"],
+    deadlines: ["Friday, 5:00 PM — project timeline", "Next Tuesday — budget review sync", "End of month — client feedback due"],
   };
 }
 
