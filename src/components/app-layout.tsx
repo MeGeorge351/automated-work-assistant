@@ -187,13 +187,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
           <header className="sticky top-0 z-10 border-b border-border bg-card">
             <div className="flex items-center justify-between px-6 py-3">
               <h1 className="text-base font-semibold text-foreground">WorkFlow AI</h1>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 {generating && (
                   <span className="flex items-center gap-2 text-primary">
                     <Loader2 className="h-4 w-4 animate-spin" />
                     Generating…
                   </span>
                 )}
+                <ThemeToggle />
               </div>
             </div>
             {/* Responsible AI disclaimer banner */}
