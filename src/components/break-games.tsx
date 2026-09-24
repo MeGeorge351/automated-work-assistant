@@ -81,8 +81,9 @@ function TicTacToe() {
     if (!result) {
       // Computer: pick a random open cell.
       const open = next.map((c, idx) => (c ? -1 : idx)).filter((idx) => idx >= 0);
-      if (open.length > 0) {
-        next[open[Math.floor(Math.random() * open.length)]!] = "O";
+      const pick = open[Math.floor(Math.random() * open.length)];
+      if (pick !== undefined) {
+        next[pick] = "O";
         result = winnerOf(next);
       }
     }
@@ -165,8 +166,8 @@ function MemoryMatch() {
 
     if (newOpen.length === 2) {
       setMoves((m) => m + 1);
-      const [a, b] = newOpen.map((oid) => next.find((c) => c.id === oid)!);
-      if (a.emoji === b.emoji) {
+      const [a, b] = newOpen.map((oid) => next.find((c) => c.id === oid));
+      if (a && b && a.emoji === b.emoji) {
         setCards((cs) => cs.map((c) => (newOpen.includes(c.id) ? { ...c, matched: true } : c)));
         setOpen([]);
       } else {
