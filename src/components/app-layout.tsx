@@ -32,7 +32,6 @@ const MOTIVATIONS = [
 ];
 
 const MOTIVATION_INTERVAL = 60 * 60 * 1000; // 1 hour
-const NEXT_KEY = "workflow-ai-next-motivation";
 const INDEX_KEY = "workflow-ai-motivation-index";
 
 function MotivationBubble() {
@@ -41,23 +40,22 @@ function MotivationBubble() {
   useEffect(() => {
     let timer: number | undefined;
 
-    const schedule = () => {
-      const now = Date.now();
-      let next = Number(localStorage.getItem(NEXT_KEY));
-      if (!next || Number.isNaN(next) || next < now - MOTIVATION_INTERVAL) {
-        next = now + MOTIVATION_INTERVAL; // first show ~1 hour after opening
-      }
-      const delay = Math.max(next - now, 0);
-      timer = window.setTimeout(() => {
-        const idx = Number(localStorage.getItem(INDEX_KEY)) || 0;
-        setMessage(MOTIVATIONS[idx % MOTIVATIONS.length] ?? MOTIVATIONS[0]!);
-        localStorage.setItem(INDEX_KEY, String((idx + 1) % MOTIVATIONS.length));
-        localStorage.setItem(NEXT_KEY, String(Date.now() + MOTIVATION_INTERVAL));
-        schedule();
-      }, delay);
+    // Show immediately on open, then once every hour while the app stays open.
+    const show = () => {
+      const idx = Number(localStorage.getItem(INDEX_KEY)) || 0;
+      setMessage(MOTIVATIONS[idx % MOTIVATIONS.length] ?? MOTIVATIONS[0]!);
+      localStorage.setItem(INDEX_KEY, String((idx + 1) % MOTIVATIONS.length));
     };
 
-    schedule();
+    show();
+    const scheduleNext = () => {
+      timer = window.setTimeout(() => {
+        show();
+        scheduleNext();
+      }, MOTIVATION_INTERVAL);
+    };
+    scheduleNext();
+
     return () => {
       if (timer !== undefined) window.clearTimeout(timer);
     };
