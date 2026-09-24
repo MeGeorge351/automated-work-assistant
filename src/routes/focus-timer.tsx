@@ -195,6 +195,8 @@ function FocusTimerPage() {
             </div>
           </div>
         </Card>
+
+        <BreakGames />
       </div>
     </AppLayout>
   );
