@@ -39,7 +39,7 @@ function MotivationBubble() {
   const [messageIndex, setMessageIndex] = useState(0);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
+    let timer: number | undefined;
 
     const schedule = () => {
       const storedTime = Number(window.localStorage.getItem(NEXT_MOTIVATION_KEY));
@@ -68,7 +68,9 @@ function MotivationBubble() {
     };
 
     schedule();
-    return () => window.clearTimeout(timer);
+    return () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+    };
   }, []);
 
   useEffect(() => {
