@@ -178,6 +178,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
           <main className="flex-1 px-6 py-8">{children}</main>
         </div>
       </div>
+      <MotivationBubble />
     </LoadingContext.Provider>
   );
 }
