@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Mail, ClipboardList, CalendarCheck, Workflow, Loader2, ShieldAlert } from "lucide-react";
+import { Mail, ClipboardList, CalendarCheck, Workflow, Loader2, ShieldAlert, Sparkles, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -21,6 +21,94 @@ const NAV_ITEMS = [
   { to: "/task-planner", label: "Task Planner", icon: CalendarCheck },
 ] as const;
 
+// ---- Hourly motivation bubble ----
+const MOTIVATIONS = [
+  "Small steps compound. One focused task now beats a perfect plan later.",
+  "You've got this — clear the busiest thing first and the day gets lighter.",
+  "Progress, not perfection. Ship the draft, then refine.",
+  "A quick break is productive too. Stretch, breathe, come back sharper.",
+  "Your future self will thank you for the task you finish today.",
+  "Deep work beats busy work. Pick one thing and give it your full attention.",
+];
+
+const MOTIVATION_INTERVAL = 60 * 60 * 1000; // 1 hour
+const NEXT_KEY = "workflow-ai-next-motivation";
+const INDEX_KEY = "workflow-ai-motivation-index";
+
+function MotivationBubble() {
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let timer: number | undefined;
+
+    const schedule = () => {
+      const now = Date.now();
+      let next = Number(localStorage.getItem(NEXT_KEY));
+      if (!next || Number.isNaN(next) || next < now - MOTIVATION_INTERVAL) {
+        next = now + MOTIVATION_INTERVAL; // first show ~1 hour after opening
+      }
+      const delay = Math.max(next - now, 0);
+      timer = window.setTimeout(() => {
+        const idx = Number(localStorage.getItem(INDEX_KEY)) || 0;
+        setMessage(MOTIVATIONS[idx % MOTIVATIONS.length]);
+        localStorage.setItem(INDEX_KEY, String((idx + 1) % MOTIVATIONS.length));
+        localStorage.setItem(NEXT_KEY, String(Date.now() + MOTIVATION_INTERVAL));
+        schedule();
+      }, delay);
+    };
+
+    schedule();
+    return () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!message) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMessage(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [message]);
+
+  if (!message) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/20 backdrop-blur-sm">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="motivation-title"
+        className="relative mx-4 w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in-95 motion-reduce:animate-none"
+      >
+        <button
+          onClick={() => setMessage(null)}
+          aria-label="Dismiss motivation"
+          className="absolute right-3 top-3 rounded-md p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <div className="flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
+            <Sparkles className="h-5 w-5" />
+          </span>
+          <div>
+            <h2 id="motivation-title" className="text-sm font-semibold text-foreground">
+              A little boost
+            </h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{message}</p>
+          </div>
+        </div>
+        <div className="mt-4 flex justify-end">
+          <Button size="sm" onClick={() => setMessage(null)}>
+            Back to it
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const [generating, setGenerating] = useState(false);
