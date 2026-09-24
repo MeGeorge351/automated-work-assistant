@@ -21,104 +21,6 @@ const NAV_ITEMS = [
   { to: "/task-planner", label: "Task Planner", icon: CalendarCheck },
 ] as const;
 
-const MOTIVATIONS = [
-  "Small, focused steps create meaningful progress.",
-  "You do not have to finish everything — just move the right thing forward.",
-  "Take a breath. Clear thinking is productive work, too.",
-  "Progress counts, even when it feels quiet.",
-  "Protect your focus. The next important step is enough.",
-  "You are building momentum, one thoughtful action at a time.",
-] as const;
-
-const MOTIVATION_INTERVAL = 60 * 60 * 1000;
-const NEXT_MOTIVATION_KEY = "workflow-ai-next-motivation";
-const MOTIVATION_INDEX_KEY = "workflow-ai-motivation-index";
-
-function MotivationBubble() {
-  const [visible, setVisible] = useState(false);
-  const [messageIndex, setMessageIndex] = useState(0);
-
-  useEffect(() => {
-    let timer: number | undefined;
-
-    const schedule = () => {
-      const storedTime = Number(window.localStorage.getItem(NEXT_MOTIVATION_KEY));
-      const nextTime = Number.isFinite(storedTime) && storedTime > 0
-        ? storedTime
-        : Date.now() + MOTIVATION_INTERVAL;
-
-      window.localStorage.setItem(NEXT_MOTIVATION_KEY, String(nextTime));
-      const delay = Math.max(0, nextTime - Date.now());
-
-      timer = window.setTimeout(() => {
-        const storedIndex = Number(window.localStorage.getItem(MOTIVATION_INDEX_KEY));
-        const nextIndex = Number.isFinite(storedIndex)
-          ? (storedIndex + 1) % MOTIVATIONS.length
-          : 0;
-
-        setMessageIndex(nextIndex);
-        setVisible(true);
-        window.localStorage.setItem(MOTIVATION_INDEX_KEY, String(nextIndex));
-        window.localStorage.setItem(
-          NEXT_MOTIVATION_KEY,
-          String(Date.now() + MOTIVATION_INTERVAL),
-        );
-        schedule();
-      }, delay);
-    };
-
-    schedule();
-    return () => {
-      if (timer !== undefined) window.clearTimeout(timer);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!visible) return;
-
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setVisible(false);
-    };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [visible]);
-
-  if (!visible) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/10 px-4 backdrop-blur-[2px] animate-in fade-in duration-200">
-      <section
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="motivation-title"
-        className="relative w-full max-w-md overflow-hidden rounded-lg border border-border bg-popover p-7 text-center shadow-xl animate-in zoom-in-95 duration-200 motion-reduce:animate-none"
-      >
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={() => setVisible(false)}
-          aria-label="Dismiss motivation"
-          className="absolute right-3 top-3 text-muted-foreground"
-        >
-          <X />
-        </Button>
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent text-accent-foreground">
-          <Sparkles className="h-5 w-5" />
-        </span>
-        <p id="motivation-title" className="mt-5 text-xs font-semibold uppercase text-primary">
-          A moment for you
-        </p>
-        <p className="mt-2 text-lg font-medium leading-relaxed text-popover-foreground">
-          {MOTIVATIONS[messageIndex]}
-        </p>
-        <Button type="button" onClick={() => setVisible(false)} className="mt-6">
-          Back to it
-        </Button>
-      </section>
-    </div>
-  );
-}
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const [generating, setGenerating] = useState(false);
@@ -127,7 +29,6 @@ export function AppLayout({ children }: { children: ReactNode }) {
   return (
     <LoadingContext.Provider value={{ generating, setGenerating }}>
       <div className="flex min-h-screen bg-background">
-        <MotivationBubble />
         {/* Left sidebar */}
         <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-sidebar">
           <Link to="/" className="flex items-center gap-2.5 border-b border-border px-5 py-5">
