@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { Play, Pause, RotateCcw, Coffee, Brain } from "lucide-react";
 import { AppLayout } from "@/components/app-layout";
 import { Card, CardHeader, Label, TextInput } from "@/components/ui-kit";
-import { BreakGames } from "@/components/break-games";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/focus-timer")({
@@ -195,8 +194,6 @@ function FocusTimerPage() {
             </div>
           </div>
         </Card>
-
-        <BreakGames />
       </div>
     </AppLayout>
   );
