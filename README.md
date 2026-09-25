@@ -93,5 +93,5 @@ AI-generated content may contain inaccuracies or incomplete information. Users s
 
 ## Team Members
 
-* [Your Name / Role]
-* *(Add other team members here if applicable)*
+* [Mxolsis/ founder]
+
